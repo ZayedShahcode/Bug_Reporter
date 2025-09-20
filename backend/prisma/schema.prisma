@@ -1,0 +1,49 @@
+
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role{
+  Reporter
+  Admin
+}
+
+enum Severity {
+  Low
+  Medium
+  High
+}
+
+enum Status {
+  Open
+  InProgress
+  Closed
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  name     String
+  email    String  @unique
+  password String
+  role     Role    @default(Reporter)
+  bugs     Bug[]    // One to Many relationsip
+}
+
+model Bug {
+  id            Int         @id @default(autoincrement())
+  title         String
+  description   String
+  severity      Severity
+  status        Status      @default(Open)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  reporterId    Int
+  reporter      User        @relation(fields: [reporterId], references: [id])
+}
