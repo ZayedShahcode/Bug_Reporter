@@ -5,9 +5,17 @@ require('dotenv').config();
 const AuthRouter = require('./routes/AuthRoutes');
 const BugRouter = require('./routes/BugRoutes')
 
+const corsOptions = {
+  origin: ["http://localhost:5173"],
+  methods: ["GET","POST","PUT","PATCH","DELETE"],
+  allowedHeaders: ["Content-Type","Authorization"],
+  credentials: true
+}
+
+
 const app = express();
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use('/api/auth',AuthRouter)
