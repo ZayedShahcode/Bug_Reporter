@@ -83,4 +83,32 @@ async function updateBugStatus(req,res){
     }
 }
 
-module.exports = {createBug,getAllBugs,getBugsByUser,updateBugStatus};
+async function deleteBug(req, res) {
+  try {
+    const bugId = parseInt(req.params.bugId, 10);
+
+    // Check if bug exists
+    const findBug = await prisma.bug.findUnique({
+      where: { id: bugId },
+    });
+
+    if (!findBug) {
+      return res.status(404).json({ message: "Bug not found" });
+    }
+
+    if (req.user.role !== "Admin" && findBug.reporterId !== req.user.id) {
+      return res.status(403).json({ message: "You are not authorized to delete this bug" });
+    }
+
+    await prisma.bug.delete({
+      where: { id: bugId },
+    });
+
+    res.status(200).json({ message: "Bug deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+}
+
+module.exports = {createBug,getAllBugs,getBugsByUser,updateBugStatus,deleteBug};
