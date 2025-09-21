@@ -17,7 +17,7 @@ const AdminDashboard: React.FC = () => {
     setLoading(true);
     setError("");
     try {
-      const response = await fetch(`http://localhost:3000/api/bugs/all`, {
+      const response = await fetch(`https://bug-reporter-4htm.onrender.com/api/bugs/all`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

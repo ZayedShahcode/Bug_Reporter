@@ -30,7 +30,7 @@ const BugCard: React.FC<BugCardProps> = ({ bug }) => {
     setError("");
     setSuccess(false);
     try {
-      const response = await fetch(`http://localhost:3000/api/bugs/update/${bug.id}`, {
+      const response = await fetch(`https://bug-reporter-4htm.onrender.com/api/bugs/update/${bug.id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -43,7 +43,6 @@ const BugCard: React.FC<BugCardProps> = ({ bug }) => {
         setSuccess(true);
         bug.status= newStatus;
         setEditing(false);
-        // Optionally, trigger a refresh in parent
       } else {
         setError(data.error || "Failed to update status.");
       }

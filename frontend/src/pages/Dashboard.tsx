@@ -1,6 +1,3 @@
-
-
-
 import React, { useState } from "react";
 import BugReportForm from "../components/BugReportForm";
 import BugList from "../components/BugList";

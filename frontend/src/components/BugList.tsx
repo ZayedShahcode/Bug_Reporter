@@ -17,7 +17,7 @@ const BugList: React.FC<{ refresh: boolean }> = ({ refresh }) => {
     setLoading(true);
     setError("");
     try {
-      const response = await fetch(`http://localhost:3000/api/bugs/all/${user?.id}`, {
+      const response = await fetch(`https://bug-reporter-4htm.onrender.com/api/bugs/all/${user?.id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
