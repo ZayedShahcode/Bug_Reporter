@@ -78,5 +78,4 @@ BugReporter/
 
 ---
 
-## License
-MIT
+
