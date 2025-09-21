@@ -64,10 +64,10 @@ const BugReportForm: React.FC<{ onBugReported: () => void }> = ({ onBugReported 
   };
 
   return (
-    <form className="bug-report-form" onSubmit={handleSubmit}>
-      <h3>Report a New Bug</h3>
-      <div>
-        <label htmlFor="title">Title</label>
+    <form className="bg-white rounded-lg shadow-md p-6 mb-8 max-w-xl mx-auto border border-gray-200" onSubmit={handleSubmit}>
+      <h3 className="text-2xl font-bold mb-6 text-center text-blue-700">Report a New Bug</h3>
+      <div className="mb-4">
+        <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
         <input
           type="text"
           name="title"
@@ -75,41 +75,42 @@ const BugReportForm: React.FC<{ onBugReported: () => void }> = ({ onBugReported 
           value={formData.title}
           onChange={handleChange}
           required
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
         />
-        {errors.title && <span className="error">{errors.title}</span>}
+        {errors.title && <span className="text-red-500 text-xs">{errors.title}</span>}
       </div>
-      <div>
-        <label htmlFor="description">Description</label>
+      <div className="mb-4">
+        <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
         <textarea
           name="description"
           id="description"
           value={formData.description}
           onChange={handleChange}
           required
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
         />
-        {errors.description && <span className="error">{errors.description}</span>}
+        {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
       </div>
-      <div>
-        <label htmlFor="severity">Severity</label>
+      <div className="mb-4">
+        <label htmlFor="severity" className="block text-sm font-medium text-gray-700">Severity</label>
         <select
           name="severity"
           id="severity"
           value={formData.severity}
           onChange={handleChange}
           required
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
         >
           {severityOptions.map((option) => (
             <option key={option} value={option}>{option}</option>
           ))}
         </select>
-        {errors.severity && <span className="error">{errors.severity}</span>}
+        {errors.severity && <span className="text-red-500 text-xs">{errors.severity}</span>}
       </div>
-      <div>
-      </div>
-      <button type="submit" disabled={loading}>Report Bug</button>
-      {loading && <div>Reporting bug...</div>}
-      {success && <div className="success">Bug reported successfully!</div>}
-      {errors.general && <div className="error">{errors.general}</div>}
+      <button type="submit" disabled={loading} className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition disabled:opacity-50">Report Bug</button>
+      {loading && <div className="text-blue-500 text-center">Reporting bug...</div>}
+      {success && <div className="text-green-500 text-center">Bug reported successfully!</div>}
+      {errors.general && <div className="text-red-500 text-center">{errors.general}</div>}
     </form>
   );
 };
@@ -148,16 +149,18 @@ const BugList: React.FC = () => {
     fetchBugs();
   }, []);
 
+  
+
   return (
-    <div className="bug-list">
-      <h3>Your Reported Bugs</h3>
-      {loading && <div>Loading bugs...</div>}
-      {error && <div className="error">{error}</div>}
-      <div className="bug-cards">
+    <div className="max-w-4xl mx-auto">
+      <h3 className="text-xl font-bold mb-6 text-blue-700">Your Reported Bugs</h3>
+      {loading && <div className="text-blue-500">Loading bugs...</div>}
+      {error && <div className="text-red-500">{error}</div>}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {bugs.map((bug) => (
           <BugCard key={bug.id} bug={bug} />
         ))}
-        {(!loading && bugs.length === 0) && <div>No bugs reported yet.</div>}
+        {(!loading && bugs.length === 0) && <div className="text-gray-500">No bugs reported yet.</div>}
       </div>
     </div>
   );
@@ -168,8 +171,15 @@ const Dashboard: React.FC = () => {
   const handleBugReported = () => {
     setRefresh((r) => !r);
   };
+
+  if(!localStorage.getItem("token")){
+    return(
+        <div className="text-red-500 grid place-items-center">Please Login to view this page</div>
+    )
+  }
+
   return (
-    <div className="dashboard-container">
+    <div className="min-h-screen bg-gray-100 py-8">
       <BugReportForm onBugReported={handleBugReported} />
       <BugList key={refresh ? "refresh1" : "refresh0"} />
     </div>

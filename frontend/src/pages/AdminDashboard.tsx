@@ -6,11 +6,14 @@ const AdminDashboard: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const userString = localStorage.getItem("user");
+  const user = userString ? JSON.parse(userString) : null;
+
   const fetchAllBugs = async () => {
     setLoading(true);
     setError("");
     try {
-      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/bugs/all`, {
+      const response = await fetch(`http://localhost:3000/api/bugs/all`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -31,16 +34,29 @@ const AdminDashboard: React.FC = () => {
     fetchAllBugs();
   }, []);
 
+  if(!localStorage.getItem("user")){
+    return(
+        <div className="text-red-500 grid place-items-center">Please Login to view this page</div>
+    )
+  }
+
+  if(user.role !== "Admin"){
+    return(
+        <div className="text-red grid place-items-center">You are not allowed to access this page</div>
+    )
+  }
   return (
-    <div className="admin-dashboard-container">
-      <h2>All Reported Bugs</h2>
-      {loading && <div>Loading bugs...</div>}
-      {error && <div className="error">{error}</div>}
-      <div className="bug-cards">
-        {bugs.map((bug) => (
-          <BugCard key={bug.id} bug={bug} />
-        ))}
-        {(!loading && bugs.length === 0) && <div>No bugs reported yet.</div>}
+    <div className="min-h-screen bg-gray-100 py-8">
+      <div className="max-w-5xl mx-auto">
+        <h2 className="text-3xl font-bold mb-8 text-center text-blue-700">All Reported Bugs</h2>
+        {loading && <div className="text-blue-500">Loading bugs...</div>}
+        {error && <div className="text-red-500">{error}</div>}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {bugs.map((bug) => (
+            <BugCard key={bug.id} bug={bug} />
+          ))}
+          {(!loading && bugs.length === 0) && <div className="text-gray-500">No bugs reported yet.</div>}
+        </div>
       </div>
     </div>
   );
