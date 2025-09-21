@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import BugCard from "../components/BugCard";
+import BugFilters from "../components/BugFilters";
 
 const AdminDashboard: React.FC = () => {
   const [bugs, setBugs] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [status, setStatus] = useState("All");
+  const [severity, setSeverity] = useState("All");
+  const [search, setSearch] = useState("");
 
   const userString = localStorage.getItem("user");
   const user = userString ? JSON.parse(userString) : null;
@@ -51,15 +55,36 @@ const AdminDashboard: React.FC = () => {
         <h2 className="text-3xl font-bold mb-8 text-center text-blue-700">All Reported Bugs</h2>
         {loading && <div className="text-blue-500">Loading bugs...</div>}
         {error && <div className="text-red-500">{error}</div>}
+        <BugFilters
+          status={status}
+          severity={severity}
+          search={search}
+          onStatusChange={setStatus}
+          onSeverityChange={setSeverity}
+          onSearchChange={setSearch}
+        />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {bugs.map((bug) => (
-            <BugCard key={bug.id} bug={bug} />
-          ))}
-          {(!loading && bugs.length === 0) && <div className="text-gray-500">No bugs reported yet.</div>}
+          {bugs
+            .filter(bug => {
+              const statusMatch = status === "All" || bug.status === status;
+              const severityMatch = severity === "All" || bug.severity === severity;
+              const searchMatch = bug.title.toLowerCase().includes(search.toLowerCase());
+              return statusMatch && severityMatch && searchMatch;
+            })
+            .map((bug) => (
+              <BugCard key={bug.id} bug={bug} />
+            ))}
+          {(!loading && bugs.filter(bug => {
+            const statusMatch = status === "All" || bug.status === status;
+            const severityMatch = severity === "All" || bug.severity === severity;
+            const searchMatch = bug.title.toLowerCase().includes(search.toLowerCase());
+            return statusMatch && severityMatch && searchMatch;
+          }).length === 0) && <div className="text-gray-500">No bugs reported yet.</div>}
         </div>
       </div>
     </div>
   );
 };
+
 
 export default AdminDashboard;
