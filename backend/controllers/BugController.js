@@ -3,7 +3,7 @@ const {PrismaClient} = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
-export const createBugSchema = z.object({
+const createBugSchema = z.object({
   title: z
     .string()
     .min(5, "Title must be at least 5 characters long")

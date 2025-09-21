@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/auth',AuthRouter)
-app.use('/api/bugs'.BugRouter)
+app.use('/api/bugs',BugRouter)
 
 const port = process.env.PORT || 3000;
 

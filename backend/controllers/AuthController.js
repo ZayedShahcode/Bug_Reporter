@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcryptjs");
 
-const {signToken,veirfyToken} = require("../utils/jwt");
+const {signToken,veirfyToken} = require("../utils/token");
 
 const prisma = new PrismaClient();
 

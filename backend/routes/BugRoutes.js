@@ -1,6 +1,6 @@
 const express= require('express')
 
-const {createBug,getAllBugs, getBugsByUser, updateBugStatu,deleteBug} = require("../controllers/BugController")
+const {createBug,getAllBugs, getBugsByUser, updateBugStatus ,deleteBug} = require("../controllers/BugController")
 const {verifyUser} = require('../middleware/protected')
 
 const BugRouter = express.Router();
