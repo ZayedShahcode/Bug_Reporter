@@ -21,14 +21,15 @@ const createBugSchema = z.object({
 async function createBug(req,res){
     try{
         const bugData = createBugSchema.parse(req.body);
+        console.log(req.user)
         const newBug = await prisma.bug.create({data:{...bugData,reporterId:req.user.id}});
-        ;
         res.status(201).json(newBug);
     }
     catch(error){
         if(error instanceof z.ZodError){
             return res.status(400).json({errors:error.errors});
         }
+        console.log(error);
         return res.status(500).json({error:"Internal Server Error"});
     }
 }
@@ -87,7 +88,7 @@ async function deleteBug(req, res) {
   try {
     const bugId = parseInt(req.params.bugId, 10);
 
-    // Check if bug exists
+    
     const findBug = await prisma.bug.findUnique({
       where: { id: bugId },
     });
